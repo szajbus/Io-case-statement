@@ -22,56 +22,53 @@
 
   Multiline definition:
 
-    case(2) {
+    case(2) do(
       when(1) then("one")
       when(2) then("two")
       else("other")
-    } do
+    )
     # ==> two
 */
 
-CaseStmt := Object clone
+CaseStmt := Object clone do(
+  val := nil
+  whens := list()
+  elseMsg := nil
 
-CaseStmt val := nil
-CaseStmt whens := list()
-CaseStmt elseMsg := nil
+  when := method(
+    when := When clone
+    when case = self
+    when msgs = call message arguments
+    whens append(when)
+    when
+  )
 
-CaseStmt when := method(
-  when := When clone
-  when case = self
-  when msgs = call message arguments
-  whens append(when)
-  when
-)
+  else := method(
+    self elseMsg = call message argAt(0)
+    self
+  )
 
-CaseStmt else := method(
-  self elseMsg = call message argAt(0)
-  self
-)
+  do = method(
+    resend
+    match := whens detect(when, when match(val))
+    if(match, doMessage(match thenMsg argAt(0)), doMessage(elseMsg))
+  )
 
-CaseStmt do := method(
-  match := whens detect(when, when match(val))
-  if(match, doMessage(match thenMsg argAt(0)), doMessage(elseMsg))
-)
+  When := Object clone do(
+    case := nil
+    msgs := list()
+    thenMsg := nil
 
-CaseStmt When := Object clone
+    then := method(
+      self thenMsg = call message
+      case
+    )
 
-CaseStmt When case := nil
-CaseStmt When msgs := list()
-CaseStmt When thenMsg := nil
-
-CaseStmt When then := method(
-  self thenMsg = call message
-  case
-)
-
-CaseStmt When match := method(val,
-  msgs foreach(msg, if(doMessage(msg) == val, return true))
-  false
-)
-
-CaseStmt curlyBrackets := method(
-  call message arguments foreach(msg, doMessage(msg))
+    match := method(val,
+      msgs foreach(msg, if(doMessage(msg) == val, return true))
+      false
+    )
+  )
 )
 
 Object case := method(val,
