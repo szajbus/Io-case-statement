@@ -74,7 +74,7 @@ CaseStmt curlyBrackets := method(
   call message arguments foreach(msg, doMessage(msg))
 )
 
-case := method(val,
+Object case := method(val,
   case := CaseStmt clone
   case val = val
   case
