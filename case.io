@@ -31,9 +31,11 @@
 */
 
 CaseStmt := Object clone do(
-  val := nil
-  whens := list()
-  elseMsg := nil
+  init := method(
+    self val := nil
+    self whens := list()
+    self elseMsg := nil
+  )
 
   when := method(
     when := When clone
@@ -55,9 +57,11 @@ CaseStmt := Object clone do(
   )
 
   When := Object clone do(
-    case := nil
-    msgs := list()
-    thenMsg := nil
+    init := method(
+      self case := nil
+      self msgs := list()
+      self thenMsg := nil
+    )
 
     then := method(
       self thenMsg = call message
